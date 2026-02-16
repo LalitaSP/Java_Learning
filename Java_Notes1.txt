@@ -1,0 +1,558 @@
+Core Java:
+Q:1  What is a class (Entity / Model / Real life Object) ?
+
+Ans:1  What is a Class?
+A class in Java is a blueprint or template that defines the structure and behaviour of objects.
+•	Entity / Model ? In software development, especially in databases or APIs, a class is often used to represent a real-world entity (like Student, Employee, Product).
+•	Real life Object ? An object is an instance of a class (like "John" is an object of the Student class).
+ In short:
+•	Class = Definition (Blueprint)
+•	Object = Instance (Real Thing)
+________________________________________
+Example in Real Life
+Think of a Car:
+•	Class (Blueprint): Defines attributes (brand, color, speed) and behavior (drive, brake).
+•	Object (Instance): A red Honda Civic car with speed 120 km/h.
+________________________________________
+Java Example (Entity / Model Class)
+// Class representing a real-world object: Student
+public class Student {
+    // Attributes (fields / properties)
+    private int id;
+    private String name;
+    private int age;
+
+    // Constructor
+    public Student(int id, String name, int age) {
+        this.id = id;
+        this.name = name;
+        this.age = age;
+    }
+
+    // Getters and Setters (to access private fields)
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public int getAge() {
+        return age;
+    }
+
+    public void setAge(int age) {
+        this.age = age;
+    }
+
+    // Behavior (method)
+    public void displayInfo() {
+        System.out.println("Student ID: " + id + ", Name: " + name + ", Age: " + age);
+    }
+}
+________________________________________
+Using the Class (Creating Objects)
+public class Main {
+    public static void main(String[] args) {
+        // Create objects (instances of Student)
+        Student s1 = new Student(1, "Alice", 20);
+        Student s2 = new Student(2, "Bob", 22);
+
+        // Call method
+        s1.displayInfo();
+        s2.displayInfo();
+    }
+}
+________________________________________ Output:
+Student ID: 1, Name: Alice, Age: 20
+Student ID: 2, Name: Bob, Age: 22
+________________________________________
+Summary
+•	A class is a blueprint (like a design of a house).
+•	An object is a real instance (like an actual house built from the design).
+•	In Java projects, classes like Student, Employee, Product, Order act as Entity / Model classes.
+==============================================
+Q:2 What happens when we create a class in Java?
+Ans: 2 
+When we write a class in Java (for example Student), you are not yet creating memory for the object.
+we are only defining a blueprint / design / template for how objects of that type will look and behave.
+ Example:
+public class Student {
+    int id;
+    String name;
+
+    void study() {
+        System.out.println(name + " is studying.");
+    }
+}
+Here:
+•	id and name ? data members (attributes / state).
+•	study() ? method (behavior).
+At this stage, no object exists.
+________________________________________
+What happens at compile time?
+1.	When you compile the program (javac Student.java):
+o	The compiler generates a .class file (Bytecode).
+o	This bytecode contains the definition of the class (not actual objects).
+o	This file can be run on the JVM (Java Virtual Machine).
+________________________________________
+What happens at runtime?
+When you create an object using new, JVM does these steps:
+Student s1 = new Student();  // Object creation
+1.	Class Loading
+o	JVM loads the class into Method Area (Metaspace in newer JVMs).
+o	It loads class metadata (name, methods, variables, etc.).
+2.	Memory Allocation
+o	Memory is allocated in Heap for the new object (s1).
+o	Instance variables (id, name) get default values (0 for int, null for String, etc.).
+3.	Constructor Call
+o	The constructor (Student()) is called to initialize the object.
+o	If no constructor is written, the compiler automatically provides a default constructor.
+4.	Reference Assignment
+o	The reference variable s1 (stored in stack) points to the object in heap.
+________________________________________
+Example in Action
+public class Main {
+    public static void main(String[] args) {
+        // Creating object
+        Student s1 = new Student();
+        s1.id = 101;
+        s1.name = "Asha";
+
+        s1.study(); // Calling method
+    }
+}
+Output:
+Asha is studying.
+________________________________________
+Summary
+•	Creating a class ? Only defines a blueprint (no memory for objects yet).
+•	Compiling ? Generates .class file with bytecode.
+•	Creating an object (new) ?
+1.	Loads class into memory (if not already loaded).
+2.	Allocates memory in Heap.
+3.	Initializes fields with default values.
+4.	Calls constructor.
+5.	Reference variable points to object.
+Let us visualize what happens in memory when we create a class and then objects from it.
+JVM Memory Areas Involved
+When you create a class and objects, three important memory areas are used:
+1.	Method Area (Metaspace in Java 8+)
+o	Stores class-level information (class name, methods, static variables).
+o	Loaded once per class.
+2.	Heap Area
+o	Stores objects (instances) created with new.
+o	Each object has its own copy of instance variables.
+3.	Stack Area
+o	Stores reference variables (like s1, s2) which point to objects in Heap.
+o	Each thread has its own stack.
+________________________________________
+?? Example Code
+class Student {
+    int id;
+    String name;
+
+    void study() {
+        System.out.println(name + " is studying.");
+    }
+}
+
+public class Main {
+    public static void main(String[] args) {
+        Student s1 = new Student(); // Object 1
+        s1.id = 101;
+        s1.name = "Alice";
+
+        Student s2 = new Student(); // Object 2
+        s2.id = 102;
+        s2.name = "Bob";
+
+        s1.study();
+        s2.study();
+    }
+}
+________________________________________
+?? Step by Step (Memory Diagram)
+Step 1: Class Loading
+•	JVM loads Student into Method Area.
+•	Method Area contains:
+o	Class name (Student)
+o	Method definitions (study())
+o	Metadata
+________________________________________
+Step 2: Object Creation
+Student s1 = new Student();
+•	Heap: New object created.
+o	id = 0 (default)
+o	name = null (default)
+•	Stack: Reference variable s1 created ? points to heap object.
+________________________________________
+Step 3: Assign Values
+s1.id = 101;
+s1.name = "Alice";
+•	Heap object updated:
+o	id = 101
+o	name = "Alice"
+________________________________________
+Step 4: Second Object
+Student s2 = new Student();
+s2.id = 102;
+s2.name = "Bob";
+•	Heap now has two different objects.
+•	s1 ? Alice object.
+•	s2 ? Bob object.
+________________________________________
+?? Memory Diagram (Simplified)
+Method Area (Metaspace)
+-------------------------
+Class: Student
+  - int id
+  - String name
+  - void study()
+
+Heap Area
+-------------------------
+Object#1 (Student)
+   id = 101
+   name = "Alice"
+
+Object#2 (Student)
+   id = 102
+   name = "Bob"
+
+Stack Area (main thread)
+-------------------------
+s1  ---> Object#1 (Alice)
+s2  ---> Object#2 (Bob)
+________________________________________
+Output of the Program
+Alice is studying.
+Bob is studying.
+________________________________________
+? Summary:
+•	Defining a class ? goes into Method Area (blueprint only).
+•	Creating an object ? memory allocated in Heap.
+•	Reference variable (like s1) ? stored in Stack, pointing to Heap object.
+=========================================
+Q: Why main() is static, void and public. Discuss each of the 3
+In the statement System.out.print()
+What is System and to which package it belongs to?
+What is out?
+From which class the print() belongs to ?
+Ans: 
+1. Why main() is static, void, and public?
+(a) Why main() is static?
+•	JVM needs to call the main() method without creating an object of the class.
+•	If it were not static, JVM would have to do:
+•	new Main().main(args);
+But JVM doesn’t know how to create objects of your class (constructor may require arguments).
+•	Making it static allows JVM to directly call it as:
+•	ClassName.main(args);
+Example:
+public class Demo {
+    public static void main(String[] args) {
+        System.out.println("Hello, JVM can call me without object!");
+    }
+}
+________________________________________
+(b) Why main() is void?
+•	The JVM does not expect any return value from the main() method.
+•	Its only job is to start the program.
+•	If main() returned something, JVM wouldn’t know what to do with the return value.
+Example:
+public class Demo {
+    public static void main(String[] args) {
+        System.out.println("No return value needed!");
+    }
+}
+________________________________________
+(c) Why main() is public?
+•	JVM needs to access it from outside the class (since JVM is not part of your class).
+•	If main() were private, JVM couldn’t call it.
+ Example:
+public class Demo {
+    public static void main(String[] args) {
+        System.out.println("Accessible by JVM!");
+    }
+}
+________________________________________
+ So:
+•	public ? JVM can access it.
+•	static ? No object required.
+•	void ? No return expected.
+________________________________________
+2. In System.out.print()
+(a) What is System?
+•	System is a final class in Java.
+•	It belongs to the package: java.lang.
+•	Since java.lang is automatically imported, we don’t need to import it manually.
+Example:
+System.out.println("System class belongs to java.lang package");
+________________________________________
+(b) What is out?
+•	out is a static data member (object) of type PrintStream in the System class.
+•	It represents the standard output stream (usually the console).
+•	That’s why we can write:
+•	System.out.print("Hello");
+Here out is already created by the JVM and points to the console.
+________________________________________
+(c) From which class does print() belong to?
+•	print() and println() methods belong to the PrintStream class (in java.io package).
+•	Since System.out is a PrintStream object, we can call print() on it.
+ Example:
+import java.io.PrintStream;
+
+public class Demo {
+    public static void main(String[] args) {
+        PrintStream ps = System.out;  // 'out' is a PrintStream
+        ps.print("This is from PrintStream!");
+    }
+}
+________________________________________
+ Complete Breakdown of System.out.print()
+1.	System ? Class from java.lang.
+2.	out ? Static field in System class, type PrintStream.
+3.	print() ? Method of PrintStream class (in java.io).
+So:
+System.out.print("Hello");
+is actually:
+•	Access the System class ? get the out object (PrintStream) ? call its print() method.
+________________________________________
+ Summary Table
+Part	What it is	Where it belongs
+System	Final class	java.lang
+out	Static field, type PrintStream	Inside System
+print() / println()	Methods to display output (overloaded)	java.io.PrintStream
+===================================================================
+SESSION2:
+What is this ?
+What is a reference?
+How reference is different than an object?
+Where all objects of Java are created ?
+Discuss the Compile time phase and Runtime phase of Java.
+How Java is different than C++ (object code vs bytecode)
+Create a POJO class using Source Menu
+Getter-Setter Methods in Java
+Object class in Java
+toString() method in Java
+static members (class members and class methods)
+Datatypes in Java
+Explanation: 
+What is this?
+•	this    is a keyword in Java.
+•	It refers to the current object of the class.
+ Uses of this:
+1.	To refer to current object’s instance variables.
+2.	To call another constructor in the same class.
+3.	To pass the current object as a parameter.
+Example:
+class Student {
+    int id;
+    String name;
+
+    Student(int id, String name) {
+        this.id = id;      // 'this' differentiates instance variable from parameter
+        this.name = name;
+    }
+
+    void show() {
+        System.out.println(this.name + " (ID: " + this.id + ")");
+    }
+}
+________________________________________
+2. What is a Reference?
+•	A reference is a variable that stores the memory address of an object.
+•	Reference ? points to the object in the Heap memory.
+? Example:
+Student s1 = new Student(1, "Alice"); // s1 is reference, object is in Heap
+________________________________________
+3. How Reference is different than an Object?
+•	Object ? actual entity created in Heap memory.
+•	Reference ? variable stored in Stack that points to the object.
+
+Example:
+Student s1 = new Student(1, "Aakash"); 
+•	s1 (stack) ? reference variable
+•	new Student(1, "Aakash") (heap) ? object
+________________________________________
+ 4. Where are all Objects of Java created?
+•	All Java objects are created in the Heap memory.
+•	Heap is managed by JVM and cleaned by Garbage Collector.
+________________________________________
+ 5. Compile-time phase vs Runtime phase of Java
+(a) Compile-time phase
+•	Source code (.java) ? compiled by javac ? generates Bytecode (.class).
+•	Compiler checks:
+o	Syntax errors
+o	Type checking
+(b) Runtime phase
+•	Bytecode is loaded by ClassLoader.
+•	JVM executes bytecode using Interpreter + JIT (Just-in-Time compiler).
+•	Runtime errors (NullPointer, ArrayIndexOutOfBounds, etc.) can occur here.
+? Example:
+int a = 10 / 0;  // Compiles fine, Runtime error (ArithmeticException)
+________________________________________
+6. Java vs C++ (Object code vs Bytecode)
+Feature	Java	C++
+Compilation	Java compiler ? Bytecode (.class)	C++ compiler ? Machine code (object code)
+Execution	Bytecode runs on JVM (platform-independent)	Object code runs on OS (platform-dependent)
+Portability	? High (Write Once, Run Anywhere)	? Low (needs recompilation for each platform)
+________________________________________
+7. POJO Class using Source Menu
+POJO (Plain Old Java Object) = simple class with fields, getters, setters, and no special logic.
+ Example:
+public class Employee {
+    private int id;
+    private String name;
+
+    // Getters & Setters (can generate using IDE: Right-click > Source > Generate Getters and Setters)
+    public int getId() { return id; }
+    public void setId(int id) { this.id = id; }
+
+    public String getName() { return name; }
+    public void setName(String name) { this.name = name; }
+}
+________________________________________
+ 8. Getter-Setter Methods in Java
+•	Getter ? returns the value of a private field.
+•	Setter ? sets/updates the value of a private field.
+Example:
+Employee e = new Employee();
+e.setId(101);
+System.out.println(e.getId()); // 101
+________________________________________
+ 9. Object class in Java
+•	Every class in Java implicitly extends the Object class.
+•	Methods of Object:
+o	toString()
+o	equals()
+o	hashCode()
+o	clone()
+o	finalize()
+________________________________________
+ 10. toString() Method
+•	Default toString() ? returns class name + hashcode.
+•	Usually overridden for meaningful output.
+? Example:
+class Student {
+    int id; String name;
+    Student(int id, String name){ this.id=id; this.name=name; }
+
+    @Override
+    public String toString(){
+        return id + " - " + name;
+    }
+}
+________________________________________
+ 11. Static Members (Class members and methods)
+•	Static variable ? shared across all objects.
+•	Static method ? can be called without creating object.
+? Example:
+class Counter {
+    static int count = 0;
+    Counter(){ count++; }
+}
+public class Test {
+    public static void main(String[] args) {
+        new Counter();
+        new Counter();
+        System.out.println(Counter.count); // 2
+    }
+}
+________________________________________
+?? 12. Data Types in Java
+(a) Primitive Types (8 types)
+•	byte (1 byte)
+•	short (2 bytes)
+•	int (4 bytes)
+•	long (8 bytes)
+•	float (4 bytes)
+•	double (8 bytes)
+•	char (2 bytes, Unicode)
+•	boolean (1 bit, JVM dependent)
+(b) Non-primitive Types
+•	String
+•	Arrays
+•	Classes, Interfaces, Objects
+? Example:
+int age = 25;           // primitive
+String name = "Alice";  // non-primitive
+________________________________________
+? Summary:
+•	this ? current object
+•	Reference vs Object ? reference points to object in heap
+•	Objects ? always created in Heap
+•	Compile-time ? Bytecode generation
+•	Runtime ? JVM execution
+•	Java ? Bytecode (portable), C++ ? Machine code (platform dependent)
+•	POJO ? simple class with getters/setters
+•	Object class ? root of all classes
+•	toString() ? user-friendly representation of object
+•	Static ? shared across all objects
+•	Data types ? primitive (8) + non-primitive
+visualize with a memory diagram (Heap, Stack, Method Area).
+We’ll use a small example that covers:
+•	Reference vs Object
+•	Static members
+•	this keyword
+________________________________________
+ Example Code
+class Student {
+    int id;
+    String name;
+    static String college = "ABC University"; // static member (shared)
+
+    Student(int id, String name) {
+        this.id = id;      // 'this' ? current object
+        this.name = name;
+    }
+
+    void display() {
+        System.out.println(id + " " + name + " " + college);
+    }
+}
+
+public class Main {
+    public static void main(String[] args) {
+        Student s1 = new Student(101, "Alice");
+        Student s2 = new Student(102, "Bob");
+
+        s1.display();
+        s2.display();
+    }
+}
+________________________________________
+ Step-by-Step Memory Flow
+1. Class Loading
+•	JVM loads Student class into Method Area.
+•	Stores:
+o	Class metadata (Student)
+o	Method definitions (display(), constructor)
+o	Static field (college = "ABC University")
+________________________________________
+2. Object Creation
+Student s1 = new Student(101, "Alice");
+•	Heap: Object#1 created with:
+o	id = 101
+o	name = "Alice"
+•	Stack: Reference s1 ? points to Object#1 in Heap.
+________________________________________
+3. Second Object
+Student s2 = new Student(102, "Bob");
+•	Heap: Object#2 created with:
+o	id = 102
+o	name = "Bob"
+•	Stack: Reference s2 ? points to Object#2.
+________________________________________
+4. Static Member
+•	college = "ABC University" stored only once in Method Area.
+•	Both s1 and s2 share the same static field.
